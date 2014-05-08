@@ -1,0 +1,92 @@
+-- Collator 5 Table Creation
+
+--
+-- Table structure for table `qw5customscores`
+--
+
+CREATE TABLE IF NOT EXISTS `qw5customscores` (
+  `CustomScoreID` int(11) NOT NULL auto_increment,
+  `ResultSetID` int(11) NOT NULL,
+  `Varname` varchar(100) character set utf8 collate utf8_unicode_ci NOT NULL default '',
+  `Score` float NOT NULL default '0',
+  PRIMARY KEY  (`CustomScoreID`),
+  KEY `ResultSetID` (`ResultSetID`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='QW HTML5 Custom Scores' AUTO_INCREMENT=1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `qw5questiondata`
+--
+
+CREATE TABLE IF NOT EXISTS `qw5questiondata` (
+  `QuestionID` int(11) NOT NULL auto_increment,
+  `ResultSetID` int(11) NOT NULL default '0',
+  `MD5hash` char(32) character set utf8 collate utf8_unicode_ci NOT NULL,
+  `QuestionReference` varchar(100) character set utf8 collate utf8_unicode_ci NOT NULL default '',
+  `Response` varchar(255) character set utf8 collate utf8_unicode_ci NOT NULL default '',
+  `LongResponse` longtext character set utf8 collate utf8_unicode_ci NOT NULL,
+  `Score` float NOT NULL default '0',
+  `QuestionTime` float NOT NULL default '0',
+  `ResponseSummary` varchar(500) NOT NULL,
+  PRIMARY KEY  (`QuestionID`),
+  KEY `ResultSetID` (`ResultSetID`),
+  KEY `MD5hash` (`MD5hash`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='QW HTML5 Question data record' AUTO_INCREMENT=1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `qw5questionsref`
+--
+
+CREATE TABLE IF NOT EXISTS `qw5questionsref` (
+  `QuestionRefID` int(11) NOT NULL auto_increment,
+  `Email` varchar(100) character set utf8 collate utf8_unicode_ci NOT NULL default '',
+  `MD5hash` char(32) character set utf8 collate utf8_unicode_ci NOT NULL default '',
+  `QuestionReference` varchar(100) character set utf8 collate utf8_unicode_ci NOT NULL default '',
+  `xmlsummary` text character set utf8 collate utf8_unicode_ci,
+  PRIMARY KEY  (`QuestionRefID`),
+  UNIQUE KEY `MD5hash_2` (`MD5hash`),
+  KEY `Email` (`Email`),
+  KEY `MD5hash` (`MD5hash`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='QW HTML5 Question ref record' AUTO_INCREMENT=1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `resultsets`
+--
+
+CREATE TABLE IF NOT EXISTS `resultsets` (
+  `ResultSetID` int(11) NOT NULL auto_increment,
+  `Email` varchar(100) character set utf8 collate utf8_unicode_ci NOT NULL default '',
+  `Candidate` varchar(255) character set utf8 collate utf8_unicode_ci default '',
+  `QuizName` varchar(100) NOT NULL default '',
+  `TotalTime` float NOT NULL default '0',
+  `OverAllScore` float NOT NULL default '0',
+  `TotalPossibleScore` float NOT NULL default '0',
+  `PercentageScore` float NOT NULL default '0',
+  `PercentageScoreString` varchar(10) character set utf8 collate utf8_unicode_ci NOT NULL default '',
+  `PercentagePass` float NOT NULL default '0',
+  `PassFail` enum('PASS','FAIL') character set utf8 collate utf8_unicode_ci NOT NULL default 'PASS',
+  `TimeStamp` int(11) NOT NULL default '0',
+  `SystemLanguage` varchar(100) character set utf8 collate utf8_unicode_ci NOT NULL default '',
+  `OS` varchar(100) character set utf8 collate utf8_unicode_ci NOT NULL default '',
+  `ScreenRes` varchar(100) character set utf8 collate utf8_unicode_ci NOT NULL default '',
+  `Version` varchar(255) character set utf8 collate utf8_unicode_ci NOT NULL default '',
+  `ClientTime` varchar(100) character set utf8 collate utf8_unicode_ci NOT NULL default '',
+  `SourceURL` varchar(255) character set utf8 collate utf8_unicode_ci NOT NULL default '',
+  `Data1` varchar(255) character set utf8 collate utf8_unicode_ci default '',
+  `Data2` varchar(255) character set utf8 collate utf8_unicode_ci default '',
+  `Data3` varchar(255) character set utf8 collate utf8_unicode_ci default '',
+  `Data4` varchar(255) character set utf8 collate utf8_unicode_ci default '',
+  `Data5` varchar(255) character set utf8 collate utf8_unicode_ci default '',
+  `UserIP` varchar(20) character set utf8 collate utf8_unicode_ci NOT NULL default '',
+  `html5` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`ResultSetID`),
+  KEY `Email` (`Email`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Result set record' AUTO_INCREMENT=1;
+
+-- --------------------------------------------------------
+
