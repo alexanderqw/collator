@@ -110,6 +110,9 @@ if($logerror){
 	}
 	
 	function sendToMailer($emailID, $from, $fromemail,$mailbody,$subject){
+		if($emailID=="you@email.com" || $emailID=="your@email.com"){
+			return;
+		}
 		$headers = "";
 		$headers.= "From: ".$from." <".$fromemail.">" . "\r\n";
 		$headers.= "ReplyTo: ".$from." <".$fromemail.">" . "\r\n";
@@ -137,7 +140,7 @@ if($logerror){
 	}
 	
 	function getMessage(){
-		return "Question Writer HTML5 Beta available now.";
+		return "Question Writer HTML5 available now.";
 	}
 
 function tokenTruncate($string, $your_desired_width) {

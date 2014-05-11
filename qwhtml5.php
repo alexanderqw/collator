@@ -23,6 +23,9 @@ header('Access-Control-Allow-Origin: *');
  * @package Collator
  * @version 5.0.2
  * 
+ * 5.0.3
+ * If questiontime is not set for question data, set it to 0 bugfix.
+ *
  * 5.0.2
  * Use Source ID in preference to Candidate entry where present
  *
@@ -364,7 +367,9 @@ if($contextData["percentagepass"]==""){$contextData["percentagepass"]="0";}
 			if(!is_numeric($value["Score"])){
 				$value["Score"]=-1;
 			}			
-
+			if($value["QuestionTime"]==""){
+				$value["QuestionTime"]="0";
+			}
 			$query1 .= "(";
 			$query1 .= "\"".mysql_real_escape_string($emailID)."\",";
 			$query1 .= "\"".mysql_real_escape_string($value["MD5hash"])."\",";

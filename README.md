@@ -24,5 +24,7 @@ Installation
 
 4. Edit the config.php file with your database, email and backup server settings.
 
-5. Change the result server and backup server URLs in your Question Writer quiz to point to your new server. It should look something like
+5. Change the true/false values in the 'codedpreferences.inc.php' file to set whether to send email, log xml, store results in the database.
+
+6. Change the result server and backup server URLs in your Question Writer quiz to point to your new server. It should look something like
 http://www.yourserver.com/collator5/qwhtml5.php

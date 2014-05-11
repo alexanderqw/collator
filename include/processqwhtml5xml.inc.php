@@ -17,7 +17,7 @@ function processResultXML($xmlstring,$emailID){
 
 		if (!$doc) {
 			$errors = libxml_get_errors();
-			returnError("Inside resultsxml ".$errors);
+			//returnError("Inside resultsxml ".$errors);
 			/*foreach ($errors as $error) {
 				echo display_xml_error($error, $xml);
 			}*/
@@ -124,6 +124,12 @@ function processResultXML($xmlstring,$emailID){
 		foreach($xmlNode->summary as $summary){
 			$ident = (string)$summary["ident"];
 			$theSummary = (string)$summary->asXML();
+
+			//Sometimes the order of the type and ident is the wrong way around
+			$pattern = '/summary type=\"([^\"]*)\" ident=\"([^\"]*)\"/';
+			$replacement = 'summary ident="$2" type="${1}"';
+			$theSummary = preg_replace($pattern, $replacement, $theSummary);
+
 			$questionMD5 = md5((string)$theSummary.$emailID);
 			
 			$respIDs[$ident]=array();
