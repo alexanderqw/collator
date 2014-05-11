@@ -21,7 +21,10 @@ header('Access-Control-Allow-Origin: *');
  * @copyright 2008-2013 Question Writer Corporation
  * @author Alexander McCabe 
  * @package Collator
- * @version 5.0.2
+ * @version 5.0.4
+ * 
+ * 5.0.4
+ * Suppress depreacted and missing params notices
  * 
  * 5.0.3
  * If questiontime is not set for question data, set it to 0 bugfix.
@@ -82,6 +85,8 @@ header('Access-Control-Allow-Origin: *');
  * Initial Release
  */
 
+	//Suppress deprecated/notice warnings
+	error_reporting(E_ALL);
 	//Include the files this script depends upon
 	include "config.php";
 	include "include/processqwhtml5xml.inc.php";
