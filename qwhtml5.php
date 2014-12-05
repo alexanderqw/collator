@@ -23,6 +23,9 @@ header('Access-Control-Allow-Origin: *');
  * @package Collator
  * @version 5.0.4
  * 
+ * 5.0.5
+ * Changed error reporting level, mailfooter
+ * 
  * 5.0.4
  * Suppress depreacted and missing params notices
  * 
@@ -86,7 +89,7 @@ header('Access-Control-Allow-Origin: *');
  */
 
 	//Suppress deprecated/notice warnings
-	error_reporting(E_ALL);
+	error_reporting(E_ERROR | E_PARSE);
 	//Include the files this script depends upon
 	include "config.php";
 	include "include/processqwhtml5xml.inc.php";
