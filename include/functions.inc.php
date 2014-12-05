@@ -129,9 +129,9 @@ if($logerror){
 		$mailheader.="<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />". "\r\n";
 		$mailheader.="<title>Quiz Results</title>". "\r\n";
 		$mailheader.="</head><body>". "\r\n";
-		
-		$mailfooter.="<br/>You can view your results on-line with the Question Writer Tracker</a>". "\r\n";
-		$mailfooter.="<br/>http://www.questionwritertracker.com". "\r\n";
+		$mailfooter="";
+		//$mailfooter.="<br/>You can view your results on-line with the Question Writer Tracker</a>". "\r\n";
+		//$mailfooter.="<br/>http://www.questionwritertracker.com". "\r\n";
 		$mailfooter.="</body></html>". "\r\n";
 		
 		$mailclient=$mailheader.$mailbody.$mailfooter;	
