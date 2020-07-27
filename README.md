@@ -1,4 +1,4 @@
-collator 5.0.2
+collator 5.0.3
 ==============
 
 Question Writer Collator is PHP software used for processing Question Writer quiz results into a database
