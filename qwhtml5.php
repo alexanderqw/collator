@@ -21,7 +21,10 @@ header('Access-Control-Allow-Origin: *');
  * @copyright 2008-2013 Question Writer Corporation
  * @author Alexander McCabe 
  * @package Collator
- * @version 5.0.4
+ * @version 5.0.6
+ * 
+ * 5.0.6
+ * Upgraded mysql to mysqli to support PHP7
  * 
  * 5.0.5
  * Changed error reporting level, mailfooter
@@ -300,13 +303,13 @@ if($contextData["percentagepass"]==""){$contextData["percentagepass"]="0";}
 	if(storeResultsInDatabase($emailID,$dbhost,$dbusername,$dbuserpass,$db_name)){
 				
 		//Open the database connection
-		mysql_connect($dbhost,$dbusername,$dbuserpass) or returnError("Error - could not connect to database");
+		$con = mysqli_connect($dbhost,$dbusername,$dbuserpass) or returnError("Error - could not connect to database");
 		
 		//Choose the database
-		@mysql_select_db($db_name) or returnError("Error - unable to select database");
+		@mysqli_select_db($con, $db_name) or returnError("Error - unable to select database");
 		
 		//Begin the transaction - we'll only write to the database if we successfully write all the questions to the database too
-		mysql_query("BEGIN") or returnError("Error - unable to begin database transaction");
+		mysqli_query($con, "BEGIN") or returnError("Error - unable to begin database transaction");
 		
 		
 		//QuizName,TotalTime,
@@ -314,50 +317,50 @@ if($contextData["percentagepass"]==""){$contextData["percentagepass"]="0";}
 		//Insert Resultset
 		$query="INSERT INTO resultsets (Email,Candidate,QuizName,TotalTime,OverAllScore,TotalPossibleScore,PercentageScore,PercentageScoreString,PercentagePass,PassFail,TimeStamp,SystemLanguage,OS,ScreenRes,Version,ClientTime,SourceURL,Data1,Data2,Data3,Data4,Data5,UserIP,html5) VALUES ";
 		$query .= "(";
-		$query .= "\"".mysql_real_escape_string($emailID)."\",";
-		$query .= "\"".mysql_real_escape_string($contextData["Source ID"]==""?$respIDs["Candidate"]["Response"]:$contextData["Source ID"])."\",";
-		$query .= "\"".mysql_real_escape_string($contextData["Quiz Title"])."\",";
-		$query .= mysql_real_escape_string($contextData["TotalTime"]).",";
-		$query .= mysql_real_escape_string($contextData["overallscore"]).",";
-		$query .= mysql_real_escape_string($contextData["totalpossiblescore"]).",";
-		$query .= mysql_real_escape_string($contextData["percentagescore"]).",";
-		$query .= "\"".mysql_real_escape_string($contextData["percentagescorestring"])."\",";
-		$query .= mysql_real_escape_string($contextData["percentagepass"]).",";
-		$query .= "\"".mysql_real_escape_string($contextData["passfail"])."\",";
-		$query .= "".mysql_real_escape_string($newTime).",";
-		$query .= "\"".mysql_real_escape_string($contextData["System Language"])."\",";
-		$query .= "\"".mysql_real_escape_string($contextData["OS"])."\",";
-		$query .= "\"".mysql_real_escape_string($contextData["Screen Res"])."\",";
-		$query .= "\"".mysql_real_escape_string($contextData["Version"])."\",";
-		$query .= "\"".mysql_real_escape_string($contextData["Client Time"])."\",";
-		$query .= "\"".mysql_real_escape_string($contextData["Source URL"])."\",";
-		$query .= "\"".mysql_real_escape_string($respIDs["Candidate"]["Response"])."\",";
-		$query .= "\"".mysql_real_escape_string($respIDs["CandidateData2"]["Response"])."\",";
-		$query .= "\"".mysql_real_escape_string($respIDs["CandidateData3"]["Response"])."\",";
-		$query .= "\"".mysql_real_escape_string($respIDs["CandidateData4"]["Response"])."\",";
-		$query .= "\"".mysql_real_escape_string($respIDs["CandidateData5"]["Response"])."\",";
-		$query .= "\"".mysql_real_escape_string($ipvar)."\",";
+		$query .= "\"".mysqli_real_escape_string($con, $emailID)."\",";
+		$query .= "\"".mysqli_real_escape_string($con, $contextData["Source ID"]==""?$respIDs["Candidate"]["Response"]:$contextData["Source ID"])."\",";
+		$query .= "\"".mysqli_real_escape_string($con, $contextData["Quiz Title"])."\",";
+		$query .= mysqli_real_escape_string($con, $contextData["TotalTime"]).",";
+		$query .= mysqli_real_escape_string($con, $contextData["overallscore"]).",";
+		$query .= mysqli_real_escape_string($con, $contextData["totalpossiblescore"]).",";
+		$query .= mysqli_real_escape_string($con, $contextData["percentagescore"]).",";
+		$query .= "\"".mysqli_real_escape_string($con, $contextData["percentagescorestring"])."\",";
+		$query .= mysqli_real_escape_string($con, $contextData["percentagepass"]).",";
+		$query .= "\"".mysqli_real_escape_string($con, $contextData["passfail"])."\",";
+		$query .= "".mysqli_real_escape_string($con, $newTime).",";
+		$query .= "\"".mysqli_real_escape_string($con, $contextData["System Language"])."\",";
+		$query .= "\"".mysqli_real_escape_string($con, $contextData["OS"])."\",";
+		$query .= "\"".mysqli_real_escape_string($con, $contextData["Screen Res"])."\",";
+		$query .= "\"".mysqli_real_escape_string($con, $contextData["Version"])."\",";
+		$query .= "\"".mysqli_real_escape_string($con, $contextData["Client Time"])."\",";
+		$query .= "\"".mysqli_real_escape_string($con, $contextData["Source URL"])."\",";
+		$query .= "\"".mysqli_real_escape_string($con, $respIDs["Candidate"]["Response"])."\",";
+		$query .= "\"".mysqli_real_escape_string($con, $respIDs["CandidateData2"]["Response"])."\",";
+		$query .= "\"".mysqli_real_escape_string($con, $respIDs["CandidateData3"]["Response"])."\",";
+		$query .= "\"".mysqli_real_escape_string($con, $respIDs["CandidateData4"]["Response"])."\",";
+		$query .= "\"".mysqli_real_escape_string($con, $respIDs["CandidateData5"]["Response"])."\",";
+		$query .= "\"".mysqli_real_escape_string($con, $ipvar)."\",";
 		$query .= "1";
 		$query .= "); ";
 		//error_log($query);
-		mysql_query($query) or returnError("Error - 1. unable to write result set data ".$ipvar." ".mysql_error());
+		mysqli_query($con, $query) or returnError("Error - 1. unable to write result set data ".$ipvar." ".mysqli_error($con));
 		//Get the updated ID of the resultset
-		$resultid=mysql_insert_id();
+		$resultid=mysqli_insert_id($con);
 		
 		
 		$query="";
 		foreach ($customScores as $key => $value){
 			$query .= "(";
-			$query .= mysql_real_escape_string($resultid).",";
-			$query .= "\"".mysql_real_escape_string($key)."\",";
-			$query .= mysql_real_escape_string($value);
+			$query .= mysqli_real_escape_string($con, $resultid).",";
+			$query .= "\"".mysqli_real_escape_string($con, $key)."\",";
+			$query .= mysqli_real_escape_string($con, $value);
 			$query .= "),";
 		}	
 
 		$query=trim($query,",");
 		if($query!=""){
 			$query = "INSERT INTO qw5customscores (ResultSetID,Varname,Score) VALUES ".$query;		
-			mysql_query($query) or returnError("Error 2 - unable to write result set data ".mysql_error());
+			mysqli_query($con, $query) or returnError("Error 2 - unable to write result set data ".mysqli_error($con));
 		}
 
 		$query1="";
@@ -379,21 +382,21 @@ if($contextData["percentagepass"]==""){$contextData["percentagepass"]="0";}
 				$value["QuestionTime"]="0";
 			}
 			$query1 .= "(";
-			$query1 .= "\"".mysql_real_escape_string($emailID)."\",";
-			$query1 .= "\"".mysql_real_escape_string($value["MD5hash"])."\",";
-			$query1 .= "\"".mysql_real_escape_string($key)."\",";
-			$query1 .= "\"".mysql_real_escape_string($value["xmlsummary"])."\"";
+			$query1 .= "\"".mysqli_real_escape_string($con, $emailID)."\",";
+			$query1 .= "\"".mysqli_real_escape_string($con, $value["MD5hash"])."\",";
+			$query1 .= "\"".mysqli_real_escape_string($con, $key)."\",";
+			$query1 .= "\"".mysqli_real_escape_string($con, $value["xmlsummary"])."\"";
 			$query1 .= "),";
 									
 			$query2 .= "(";
-			$query2 .= "".mysql_real_escape_string($resultid).",";
-			$query2 .= "\"".mysql_real_escape_string($value["MD5hash"])."\",";
-			$query2 .= "\"".mysql_real_escape_string($key)."\",";
-			$query2 .= "\"".mysql_real_escape_string($value["Response"])."\",";
-			$query2 .= "\"".mysql_real_escape_string($value["LongResponse"])."\",";
-			$query2 .= "".mysql_real_escape_string($value["Score"]).",";
-			$query2 .= "".mysql_real_escape_string($value["QuestionTime"]).",";
-			$query2 .= "\"".mysql_real_escape_string($value["ResponseSummary"])."\"";
+			$query2 .= "".mysqli_real_escape_string($con, $resultid).",";
+			$query2 .= "\"".mysqli_real_escape_string($con, $value["MD5hash"])."\",";
+			$query2 .= "\"".mysqli_real_escape_string($con, $key)."\",";
+			$query2 .= "\"".mysqli_real_escape_string($con, $value["Response"])."\",";
+			$query2 .= "\"".mysqli_real_escape_string($con, $value["LongResponse"])."\",";
+			$query2 .= "".mysqli_real_escape_string($con, $value["Score"]).",";
+			$query2 .= "".mysqli_real_escape_string($con, $value["QuestionTime"]).",";
+			$query2 .= "\"".mysqli_real_escape_string($con, $value["ResponseSummary"])."\"";
 			$query2 .= "),";
 		}	
 		$query1=trim($query1,",");
@@ -402,15 +405,15 @@ if($contextData["percentagepass"]==""){$contextData["percentagepass"]="0";}
 		
 		if($query1!=""){
 			$query1 = "INSERT IGNORE INTO qw5questionsref (Email,MD5hash,QuestionReference,xmlsummary) VALUES ".$query1;		
-			mysql_query($query1) or returnError("Error 4 - unable to write result set data ".$query1." ".mysql_error());
+			mysqli_query($con, $query1) or returnError("Error 4 - unable to write result set data ".$query1." ".mysqli_error($con));
 		}
 		if($query2!=""){
 			$query2 = "INSERT INTO qw5questiondata (ResultSetID,MD5hash,QuestionReference,Response,LongResponse,Score,QuestionTime,ResponseSummary) VALUES ".$query2;
-			mysql_query($query2) or returnError("Error 5 - unable to write result set data ".$query2." ".mysql_error());
+			mysqli_query($con, $query2) or returnError("Error 5 - unable to write result set data ".$query2." ".mysqli_error($con));
 		}
 				
 		//Commit the transaction, writing to the database and closing the connection
-		mysql_query("COMMIT");
+		mysqli_query($con, "COMMIT");
 		//mysql_close();
 	}	
 
