@@ -59,7 +59,9 @@ if($logerror){
 	//Function to check for a valid email
 	function isValidEmail($emailID) 
 	{
-		return eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", $emailID);
+		//return eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", $emailID);
+		  $pattern = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/';
+		return preg_match($pattern, $emailID);
 	}//End Function
 	
 	//Function to extract the XML document from the POST stream 
